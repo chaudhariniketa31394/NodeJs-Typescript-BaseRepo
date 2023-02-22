@@ -22,7 +22,9 @@ export function getValidObjectId(id: string | ObjectID) {
 export function getUnAuthorizedRoutes(): string[] {
   return [
     '/users',
-    '/login'
+    '/login',
+    '/task',
+    '/tasks'
   ]
 }
 
@@ -48,4 +50,13 @@ export function getMailConfig(): any{
       },
     },
   }
+}
+
+export function response(error?:any,data?:any, message?:any){
+  const payload = {
+      errors:error,
+      data:data,
+      message:message
+  }
+  return payload;
 }

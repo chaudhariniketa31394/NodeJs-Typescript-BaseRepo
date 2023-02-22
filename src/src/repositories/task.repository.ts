@@ -1,7 +1,10 @@
 import { injectable } from 'inversify';
-import { ObjectID } from 'mongodb';
+import { Collection, FilterQuery, FindOneOptions, ObjectID } from 'mongodb';
+import db from '../database';
 import Repository, { IRepository } from './repository';
 
+
+export type MongoQuerySpec = { query: FilterQuery<any>, options?: FindOneOptions }
 /**
  * The schema definition. In other word,
  * A Document of the user collection contains following fields.
@@ -12,12 +15,15 @@ export interface TaskDocument {
   description: string;
   deletedAt?: Date;
   createdAt?: Date;
+  _isDeleted?:boolean;
+  isActive?:boolean
 }
 
 /**
  * Repository interface.
  */
 export interface ITaskRepository extends IRepository<TaskDocument> {
+  allTask(query:MongoQuerySpec)
 }
 
 /**
@@ -26,8 +32,18 @@ export interface ITaskRepository extends IRepository<TaskDocument> {
  *
  */
 @injectable()
-export default class UserRepository extends Repository<TaskDocument> implements ITaskRepository {
+export default class TaskRepository extends Repository<TaskDocument> implements ITaskRepository {
+  private  container: Collection;
   constructor() {
+    
     super('tasks'); // Passing collection name
+    this.container = db.getCollection('tasks');
+  }
+
+  public async allTask(query){
+    console.log("query",query)
+     return await this.container.find({"description" : "cooking"}).toArray();;
+        
+
   }
 }

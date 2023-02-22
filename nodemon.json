@@ -6,7 +6,8 @@
     "watch": [
       "src",
       "*.js",
-      ".env"
+      ".env",
+      ".yaml"
     ],
     "ext": "ts,js,json,yaml,yml"
   }

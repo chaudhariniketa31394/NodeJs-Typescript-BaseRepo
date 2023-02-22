@@ -134,7 +134,44 @@ paths:
         "200":
           description: operation successful
         "400":
-          description: Invalid status value           
+          description: Invalid status value 
+  /tasks:            
+    post: 
+      tags:
+        - Task
+      summary: get all task
+      x-swagger-router-controller: SampleController
+      description: ""
+      operationId: all task
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-access-token
+          type: bearer 
+        - name: RequestBody
+          in: body
+          description: request body
+          required: true                     
+          schema:
+            type : object
+            properties:
+              limit:
+                type: number
+                example: 20
+              pagenumber:
+                type: number 
+                example : 1
+              filterquery:
+                type: object 
+                example : {title:'Cooking'}
+      responses:
+        "200":
+          description: operation successful
+        "400":
+          description: Invalid status value                 
   /task:
     post:
       tags:
@@ -158,58 +195,12 @@ paths:
           schema:
             $ref: "#/definitions/task"
       responses:
-        "200":
-          description: operation successful
+        "201":
+          description: task created
         "400":
           description: Invalid status value 
-  /tasks:
-    get: 
-      tags:
-        - Task
-      summary: get all task
-      x-swagger-router-controller: SampleController
-      description: ""
-      operationId: all task
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: x-access-token
-          type: bearer  
-          schema:
-            $ref: "#/definitions/task"
-      responses:
-        "200":
-          description: operation successful
-        "400":
-          description: Invalid status value 
-  "/task/{taskId}":
-    get:
-      tags:
-        - Task
-      summary: get task by id
-      x-swagger-router-controller: SampleController
-      description: ""
-      operationId: taks
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: x-access-token
-          type: bearer  
-        - in: path
-          name: taskId
-          description: get task by id
-          required: false
-      responses:
-        "200":
-          description: operation successful
-        "400":
-          description: Invalid status value            
+        "404":
+          description: Invalid paramter value           
     put:
       tags:
         - Task
@@ -225,10 +216,6 @@ paths:
         - in: header
           name: x-access-token
           type: bearer  
-        - in: path
-          name: taskId
-          description: Id for task which is to be updated
-          required: true
         - in: body
           name: RequestBody
           description: task object that needs to be added to the updated
@@ -238,16 +225,23 @@ paths:
             required:
               - title
               - description
+              - taskid
             properties:
               title:
                 type: string
               description:
-                type: string          
+                type: string  
+              status:
+                type: string  
+                example: Pending
+                enum: ["Completed", "InProgress", "Pending"]                
+              taskid:
+                type: string                         
       responses:
-        "200":
-          description: operation successful
-        "400":
-          description: Invalid status value             
+        "204":
+          description: task updated successfully       
+        "404":
+          description: Invalid Paramter value             
     
     delete:
       tags:
@@ -318,6 +312,10 @@ definitions:
       description:
         type: string
         example: cooking   
+      status:
+        type: string
+        example: Pending
+        enum: ["Completed", "InProgress", "Pending"]       
   ApiResponse:
     properties:
       code:

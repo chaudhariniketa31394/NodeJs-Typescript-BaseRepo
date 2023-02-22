@@ -1,7 +1,8 @@
 import { injectable, inject } from 'inversify';
-import paginate, { Pagination } from '../utils/pagination';
-import {TaskGetDTO,TaskCreateDTO } from '../dto/task.dto';
+import { Pagination } from '../utils/pagination';
+import {TaskCreateDTO, TaskUpdateDTO} from '../dto/task.dto';
 import { ITaskRepository, TaskDocument } from '../repositories/task.repository';
+import {MongoQuerySpec} from '../repositories/repository';
 import { TYPES } from '../types';
 import { ObjectId } from 'mongodb';
 
@@ -17,8 +18,8 @@ export type NormalizedTaskDocument = Pick<TaskDocument, '_id' | 'title' | 'descr
  */
 export interface ITaskService {
   createTask(data: TaskCreateDTO): Promise<void>;
-  getAllTasks(data: TaskGetDTO): Promise<Pagination<TaskDocument>>;
-  updateTask(id: ObjectId, data: TaskCreateDTO): Promise<TaskCreateDTO>;
+  getAllTasks(query: MongoQuerySpec): Promise<Pagination<TaskDocument>>;
+  updateTask(data: TaskCreateDTO): Promise<TaskCreateDTO>;
   deleteTask(id: ObjectId): Promise<any>;
   normalizeContent(data: string): string;
 }
@@ -32,34 +33,35 @@ export default class TaskService implements ITaskService {
 
   @inject(TYPES.TaskRepository) private taskRepository: ITaskRepository;
 
-  public async createTask(data: TaskCreateDTO): Promise<void> {
-    const normalizedTitle = this.normalizeContent(data.title);
-    const normalizedDesc = this.normalizeContent(data.description);
+  public async createTask(data: TaskCreateDTO): Promise<any> {
 
-    const taskData: TaskCreateDTO = {
-      title: normalizedTitle,
-      description: normalizedDesc,
-    };
 
-    await this.taskRepository.create(taskData);
+     return await this.taskRepository.create(data);
   }
 
-  public async getAllTasks(getUserDto: TaskGetDTO): Promise<Pagination<TaskDocument>> {
-    let documents: TaskDocument[];
-    const filter = getUserDto.filter || {};
-    documents = await this.taskRepository.find(filter, getUserDto.limit, getUserDto.pageNumber);
-
-    return paginate(documents, getUserDto.limit, getUserDto.pageNumber, getUserDto.path);
+  public async getAllTasks(query: MongoQuerySpec): Promise<any> {
+    let documents: TaskDocument[]; 
+    documents = await this.taskRepository.allTask(query);
+     let data =  { data: documents,
+      limit: 0,
+      pageNumber: 0,
+      next: 0,
+      previous: 0
+     }
+    return data;
+    //return paginate(documents, getUserDto.limit, getUserDto.pageNumber);
   }
 
-  public async updateTask(id: string, data: TaskCreateDTO): Promise<TaskCreateDTO> {
-    await this.taskRepository.update({_id: id }, data); 
-    return data
+  public async updateTask(data: TaskUpdateDTO): Promise<any> {
+   const  {taskid,...payload} = data;
+   console.log("taskid",taskid)
+   console.log("payload",payload)
+    await this.taskRepository.update({_id: data.taskid }, payload); 
+   
   }
 
-  public async deleteTask(id: string): Promise<any> {
-    await this.taskRepository.removeById(id); 
-    return {msg: 'Task deleted'}
+  public async deleteTask(taskid: string): Promise<any> {    
+    await this.taskRepository.update({_id: taskid }, {_isDeleted:true,isActive:true}); 
   }
   
 

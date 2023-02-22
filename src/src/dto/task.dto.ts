@@ -12,4 +12,13 @@ export interface TaskCreateDTO {
    _id?: ObjectID
   title: string;
   description: string;
+  status:string
+}
+
+
+export interface TaskUpdateDTO {
+  taskid?: ObjectID
+ title: string;
+ description: string;
+ status:string
 }

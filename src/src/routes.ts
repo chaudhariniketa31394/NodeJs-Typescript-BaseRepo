@@ -6,7 +6,7 @@ import TaskController from './controllers/task.controller';
 import * as path from 'path';
 import * as swaggerUi from 'swagger-ui-express';
 import * as YAML from 'yamljs';
-const swaggerDocument = YAML.load(path.join(__dirname + '/../../swagger.yaml'));
+const swaggerDocument = YAML.load(path.join(__dirname + '/../../swaggerdoc.yaml'));
 
 import container from './inversify';
 
@@ -33,7 +33,7 @@ export default function (app: Application) {
 
   app.post('/task', asyncWrap(TaskControllerInstance.create.bind(TaskControllerInstance)));
   app.delete('/task/:id', asyncWrap(TaskControllerInstance.delete.bind(TaskControllerInstance)));
-  app.get('/tasks', asyncWrap(TaskControllerInstance.find.bind(TaskControllerInstance)));
+  app.post('/tasks', asyncWrap(TaskControllerInstance.find.bind(TaskControllerInstance)));
   app.get('/task/:id', asyncWrap(TaskControllerInstance.get.bind(TaskControllerInstance)));
-  app.put('/task/:id', asyncWrap(TaskControllerInstance.update.bind(TaskControllerInstance)));
+  app.put('/task', asyncWrap(TaskControllerInstance.update.bind(TaskControllerInstance)));
 }

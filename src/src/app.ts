@@ -51,11 +51,6 @@ async function bootstrap() {
   app.use(express.urlencoded({ extended: true }));
 
   /**
-   * Host static public directory
-   */
-  app.use('/', express.static('public'));
-
-  /**
    * Configure routes
    */
   routes(app);
