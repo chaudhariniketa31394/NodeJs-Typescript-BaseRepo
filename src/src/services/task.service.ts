@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import { Pagination } from '../utils/pagination';
+import paginate, { Pagination } from '../utils/pagination';
 import {TaskCreateDTO, TaskUpdateDTO} from '../dto/task.dto';
 import { ITaskRepository, TaskDocument } from '../repositories/task.repository';
 import {MongoQuerySpec} from '../repositories/repository';
@@ -42,14 +42,11 @@ export default class TaskService implements ITaskService {
   public async getAllTasks(query: MongoQuerySpec): Promise<any> {
     let documents: TaskDocument[]; 
     documents = await this.taskRepository.allTask(query);
-     let data =  { data: documents,
-      limit: 0,
-      pageNumber: 0,
-      next: 0,
-      previous: 0
-     }
-    return data;
-    //return paginate(documents, getUserDto.limit, getUserDto.pageNumber);
+    console.log("documents",documents)
+   const data =  paginate(documents, query.options.limit, query.pageNumber, query.path);
+   console.log("data",data)
+   return data;
+     //return paginate(documents, getUserDto.limit, getUserDto.pageNumber);
   }
 
   public async updateTask(data: TaskUpdateDTO): Promise<any> {

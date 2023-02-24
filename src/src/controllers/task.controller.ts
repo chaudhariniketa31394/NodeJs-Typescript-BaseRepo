@@ -24,20 +24,24 @@ export default class TaskController {
   public async find(req: ExpressRequest, res: ExpressResponse): Promise<void> {
 
     const {limit , pageNumber} = req.body
+    console.log("limit"+limit+"pagenumber"+pageNumber)
     // const limit = req.query.limit ? parseInt(req.query.limit as string) : this.limit;
     // const pageNumber = req.query.page ? parseInt(req.query.page as string) : 1;
 
     const query: MongoQuerySpec = {
-      query: {isActive:true},
+      query: {status:"Pending"},
       options:{
         limit: limit || this.limit,
         //sort: {DocumentCreatedOn: -1},
-        fields: {title:1,description:1,status:1},
-        skip: pageNumber || 1
-      }
+        projection: {title:1,description:1,status:1},
+        skip: (pageNumber  > 0) ? limit * (pageNumber - 1) : 0        
+      },
+      pageNumber:pageNumber,
+      path: req.path
     }   
+    console.log("queryquery",query)
     const result = await this.taskService.getAllTasks(query);
-    res.status(200).send(response(null,result.data,'data fetch successfully'));
+    res.status(200).send(response(null,result,'data fetch successfully'));
   }
 
   public async get(req: ExpressRequest, res: ExpressResponse): Promise<void> {

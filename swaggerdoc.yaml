@@ -161,7 +161,7 @@ paths:
               limit:
                 type: number
                 example: 20
-              pagenumber:
+              pageNumber:
                 type: number 
                 example : 1
               filterquery:

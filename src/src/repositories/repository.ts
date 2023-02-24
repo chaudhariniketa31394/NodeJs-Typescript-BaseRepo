@@ -4,7 +4,7 @@ import db from '../database';
 import { getValidObjectId } from '../utils/utils';
 
 
-export type MongoQuerySpec = { query: FilterQuery<any>, options?: FindOneOptions }
+export type MongoQuerySpec = { query: FilterQuery<any>, options?: FindOneOptions , path?:string, pageNumber?:number}
 /**
  * Fields you want to select. For mongodb it is a key-value pair.
  * Key is the name of the field and Value is 0 (exclude) or 1 (include).
