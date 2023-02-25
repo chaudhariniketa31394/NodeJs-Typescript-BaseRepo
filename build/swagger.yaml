@@ -1,0 +1,243 @@
+openapi: 3.0.1
+info:
+  title: TCPL-Infinity
+  description: Master Data
+  version: 1.0.0
+servers:
+- url: /api/v1/master/
+tags:
+- name: Buying Type
+  description: Buying Type endpoints
+- name: Specification
+  description: The swagger API specification
+
+paths:
+  /buying-type:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - buying-types
+      description: Fetch all buying-types
+      responses:
+        200:
+          description: Returns all buying-typels
+          content: {}
+
+  /business-partner-type:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - business-partner-type
+      description: Fetch all buying partner type
+      responses:
+        200:
+          description: Returns all business-partner-type
+          content: {}
+
+  /buying-channel:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - buying-channel
+      description: Fetch all buying-channel
+      responses:
+        200:
+          description: Returns all buying-channel
+          content: {}
+
+  /warehouse:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - warehouse
+      description: Fetch all warehouse
+      responses:
+        200:
+          description: Returns all warehouse
+          content: {}
+
+  /tea-type:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - tea-type
+      description: Fetch all tea-type
+      responses:
+        200:
+          description: Returns all tea-type
+          content: {}
+
+  /garden:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - garden
+      description: Fetch all garden
+      responses:
+        200:
+          description: Returns all garden
+          content: {}
+
+  /buying-center:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - buying-center
+      description: Fetch all buying-center
+      responses:
+        200:
+          description: Returns all buying-center
+          content: {}
+
+  /choice/years:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - choice
+      description: Fetch all choice
+      responses:
+        200:
+          description: Returns all choice
+          content: {}
+
+  /choice/types:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - choice
+      description: Fetch all choice
+      responses:
+        200:
+          description: Returns all choice
+          content: {}
+
+  /country:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - country
+      description: Fetch all country
+      responses:
+        200:
+          description: Returns all country
+          content: {}
+
+  /commodity-grade:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - commodity-grade
+      description: Fetch all commodity-grade
+      responses:
+        200:
+          description: Returns all commodity-grade
+          content: {}
+
+  /commodity:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - commodity
+      description: Fetch all commodity
+      responses:
+        200:
+          description: Returns all commodity
+          content: {}
+
+  /vendor:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - vendor
+      description: Fetch all vendor
+      responses:
+        200:
+          description: Returns all vendor
+          content: {}
+
+  /state:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - state
+      description: Fetch all state
+      responses:
+        200:
+          description: Returns all state
+          content: {}
+  /remark:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - Remark
+      description: Fetch all remarks
+      responses:
+        200:
+          description: Returns all remarks
+          content: {}
+
+  /buying-center-plant:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - Buying center Plant
+      description: Fetch all Buying center Plant
+      responses:
+        200:
+          description: Returns all Buying center Plant
+          content: {}
+
+  /spec:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - Specification
+      responses:
+        200:
+          description: Return the API specification
+          content: {}
+ 
+  /plants:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - Plants
+      description: Fetch all plants
+      responses:
+        200:
+          description: Returns all plants
+          content: {}
+components:
+  schemas:
+    ExampleBody:
+      title: example
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: no_stress
+  securitySchemes:
+    bearerAuth:            
+      type: http
+      scheme: bearer
+    
