@@ -18,3 +18,8 @@ http://localhost:3000/api-docs
 
 
 ## Database Mongo DB
+
+
+
+
+![screenshot](screenshot.png?raw=true "API Screenshot")
