@@ -1,5 +1,5 @@
 import { MongoClient, Db, Collection } from 'mongodb';
-import logger from './logger';
+// import logger from './logger';
 import * as path from 'path';
 
 
@@ -32,7 +32,7 @@ class Database {
 
   public async connect(): Promise<void> {
     if (this.dbClient) {
-      logger.debug('Connection already exists');
+      // logger.debug('Connection already exists');
       return;
     }
 
@@ -41,7 +41,7 @@ class Database {
 
     const connectionString = this.getConnectionString();
 
-    logger.debug(`Database connection string: ${connectionString}`);
+    // logger.debug(`Database connection string: ${connectionString}`);
 
     const client = new MongoClient(connectionString, {
       poolSize: 50,
@@ -52,14 +52,14 @@ class Database {
     });
 
     this.dbClient = await client.connect();
-    logger.info('Connected with database host');
+    // logger.info('Connected with database host');
 
     this.databaseInstance = this.dbClient.db(this.dbName);
     }
 
   public async disconnect() {
     if (this.dbClient.isConnected()) {
-      logger.info(`Disconnected from ${this.host}/${this.dbName}`);
+      // logger.info(`Disconnected from ${this.host}/${this.dbName}`);
       await this.dbClient.close();
     }
   }
@@ -94,7 +94,7 @@ class Database {
 
     if (env === 'test') {
       const testEnv = require('dotenv').config(path.resolve(__dirname, '../../.env.test'));
-      logger.info(`Using test database ${JSON.stringify(testEnv)}`);
+      // logger.info(`Using test database ${JSON.stringify(testEnv)}`);
       
       this.password = process.env.DB_PWD || '';
       this.user = process.env.DB_USER || '';

@@ -9,7 +9,7 @@ import app from './server';
 import * as cors from 'cors';
 import routes from './routes';
 import errorHandler from './errors/error.handler';
-import logger from './logger';
+// import logger from './logger';
 import initDB from './database';
 
 /**
@@ -19,7 +19,7 @@ async function bootstrap() {
   // Attach HTTP request info logger middleware in test mode
   if (process.env.NODE_ENV === 'test') {
     app.use((req: express.Request, _res, next) => {
-      logger.debug(`[${req.method}] ${req.hostname}${req.url}`);
+      // logger.debug(`[${req.method}] ${req.hostname}${req.url}`);
 
       next();
     });
@@ -69,9 +69,9 @@ export default app;
 // Invoking the bootstrap function
 bootstrap()
   .then(() => {
-    logger.info('Server is up');
+    // logger.info('Server is up');
   })
   .catch((error) => {
-    logger.error('Unknown error. ' + error.message);
+    // logger.error('Unknown error. ' + error.message);
     throw new Error('Unknown error. ' + error.message);
   });
