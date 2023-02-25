@@ -41,8 +41,6 @@ export default class TaskRepository extends Repository<TaskDocument> implements 
   }
 
   public async allTask(query){
-    console.log("query",query.query)
-    console.log("query",{...query.options})
      return await this.container.find(query.query,query.options).toArray();
         
 

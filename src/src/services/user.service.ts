@@ -183,7 +183,7 @@ export default class UserService implements IUserService {
             { _id: user._id, email: normalizedEmail, password: password },
             process.env.TOKEN_KEY,
             {
-              expiresIn: "2h",
+              expiresIn: "1h",
             }
           )
 
@@ -230,7 +230,7 @@ export default class UserService implements IUserService {
       throw new BadRequestError(StaticStringKeys.EMAIL_NOT_AVAILABLE);
     }
     user= user[0];
-    await this.userRepository.unsetUpdate({_id: user._id }, {$unset: {token: 1}});
+    await this.userRepository.update({_id: user._id }, {token: null, isActive:false});
 
     return {msg: "logged out successfully"};
 

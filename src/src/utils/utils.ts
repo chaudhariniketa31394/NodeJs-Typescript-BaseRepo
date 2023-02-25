@@ -26,6 +26,14 @@ export function getUnAuthorizedRoutes(): string[] {
   ]
 }
 
+export function getValidateRoutes(): string[] {
+  return [
+    '/sendotp',
+    '/validateotp',
+  ]
+}
+
+
 export function getOTPConfig(): any{
   return {
     OTP_LENGTH: 4,

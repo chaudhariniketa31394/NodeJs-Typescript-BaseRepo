@@ -9,6 +9,7 @@ enum StaticStringKeys {
   USER_NOT_FOUND = 'User not found',
   USERNAME_NOT_AVAILABLE = 'Try another username',
   EMAIL_NOT_AVAILABLE = 'Try another email',
+  TOKEN_NOT_VALID = 'Token invalid',
   UNKNOWN_ERROR_TRY_AGAIN = 'Unknown error occured. Please try again.',
   OTP_EMAIL_SUBJECT = 'OTP ✔',
   REPOSITORY_ERROR_INVALID_ID = 'Invalid id',

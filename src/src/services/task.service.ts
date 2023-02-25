@@ -40,19 +40,14 @@ export default class TaskService implements ITaskService {
   }
 
   public async getAllTasks(query: MongoQuerySpec): Promise<any> {
-    let documents: TaskDocument[]; 
-    documents = await this.taskRepository.allTask(query);
-    console.log("documents",documents)
-   const data =  paginate(documents, query.options.limit, query.pageNumber, query.path);
-   console.log("data",data)
+           let documents: TaskDocument[]; 
+            documents = await this.taskRepository.allTask(query);
+          const data =  paginate(documents, query.options.limit, query.pageNumber, query.path);
    return data;
-     //return paginate(documents, getUserDto.limit, getUserDto.pageNumber);
-  }
+      }
 
   public async updateTask(data: TaskUpdateDTO): Promise<any> {
    const  {taskid,...payload} = data;
-   console.log("taskid",taskid)
-   console.log("payload",payload)
     await this.taskRepository.update({_id: data.taskid }, payload); 
    
   }

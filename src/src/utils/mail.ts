@@ -34,7 +34,6 @@ export async function sendMail (params: any){
     });
     return info;
   } catch (error) {
-    console.log(error);
     return false;
   }
 };

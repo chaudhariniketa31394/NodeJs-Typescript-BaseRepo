@@ -33,8 +33,8 @@ export default function (app: Application) {
 
 
   app.post('/task', asyncWrap(TaskControllerInstance.create.bind(TaskControllerInstance)));
-  app.delete('/task/:id', asyncWrap(TaskControllerInstance.delete.bind(TaskControllerInstance)));
+  app.post('/delete-task', asyncWrap(TaskControllerInstance.delete.bind(TaskControllerInstance)));
   app.post('/tasks', asyncWrap(TaskControllerInstance.find.bind(TaskControllerInstance)));
   app.get('/task/:id', asyncWrap(TaskControllerInstance.get.bind(TaskControllerInstance)));
-  app.put('/task', asyncWrap(TaskControllerInstance.update.bind(TaskControllerInstance)));
+  app.post('/update-task', asyncWrap(TaskControllerInstance.update.bind(TaskControllerInstance)));
 }

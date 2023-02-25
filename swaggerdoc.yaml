@@ -220,7 +220,7 @@ paths:
                 example : 1
               filterquery:
                 type: object 
-                example : {title:'Cooking'}
+                example : {status:"Pending"}
       responses:
         "200":
           description: operation successful
@@ -254,8 +254,9 @@ paths:
         "400":
           description: Invalid status value 
         "404":
-          description: Invalid paramter value           
-    put:
+          description: Invalid paramter value 
+  /update-task:                  
+    post:
       tags:
         - Task
       summary: update task by id
@@ -279,25 +280,29 @@ paths:
             required:
               - title
               - description
+              - status
               - taskid
             properties:
               title:
                 type: string
+                example: learning
               description:
                 type: string  
+                example: history book                
               status:
                 type: string  
                 example: Pending
                 enum: ["Completed", "InProgress", "Pending"]                
               taskid:
-                type: string                         
+                type: string  
+                example: 63f9b679fe0c618938f70c1c                       
       responses:
-        "204":
+        "200":
           description: task updated successfully       
         "404":
-          description: Invalid Paramter value             
-    
-    delete:
+          description: Invalid Paramter value  
+  /delete-task:  
+    post:
       tags:
         - Task
       summary: delete task by id
@@ -312,10 +317,16 @@ paths:
         - in: header
           name: x-access-token
           type: bearer  
-        - in: path
-          name: taskId
-          description: Task object that needs to be deleted
-          required: false
+        - name: RequestBody
+          in: body
+          description: request body
+          required: true                     
+          schema:
+            type : object
+            properties:
+              id:
+                type: string
+                example: 63f9b679fe0c618938f70c1c
       responses:
         "200":
           description: operation successful

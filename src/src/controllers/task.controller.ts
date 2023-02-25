@@ -23,23 +23,18 @@ export default class TaskController {
 
   public async find(req: ExpressRequest, res: ExpressResponse): Promise<void> {
 
-    const {limit , pageNumber} = req.body
-    console.log("limit"+limit+"pagenumber"+pageNumber)
-    // const limit = req.query.limit ? parseInt(req.query.limit as string) : this.limit;
-    // const pageNumber = req.query.page ? parseInt(req.query.page as string) : 1;
-
+    const {limit , pageNumber,filterquery} = req.body
     const query: MongoQuerySpec = {
-      query: {status:"Pending"},
+      query: filterquery,
       options:{
-        limit: limit || this.limit,
+        limit: parseInt(limit) || this.limit,
         //sort: {DocumentCreatedOn: -1},
         projection: {title:1,description:1,status:1},
-        skip: (pageNumber  > 0) ? limit * (pageNumber - 1) : 0        
+        skip: (parseInt(pageNumber)  > 0) ? limit * (parseInt(pageNumber) - 1) : 0        
       },
       pageNumber:pageNumber,
       path: req.path
     }   
-    console.log("queryquery",query)
     const result = await this.taskService.getAllTasks(query);
     res.status(200).send(response(null,result,'data fetch successfully'));
   }
@@ -73,9 +68,8 @@ export default class TaskController {
     const validate:any = await validatePayload(TaskUpdateSchema, req.body);
     if (validate && validate.isValid && validate.statusCode == 200) {
       req.body.taskid = getValidObjectId(req.body.taskid)
-      const result = await this.taskService.updateTask(req.body)
-      console.log("resultt",result)
-      res.status(204).send(response(null,null,'task created'))
+      await this.taskService.updateTask(req.body)
+      res.status(200).send(response(null,null,'task updated'))
     }else res.status(validate.statusCode).send(response(validate.error,null,null));
     
    // res.send(await this.taskService.updateTask(getValidObjectId(req.params.id), updateTaskDto));
@@ -84,11 +78,11 @@ export default class TaskController {
   }
 
   public async delete (req: ExpressRequest, res: ExpressResponse): Promise<void> {
-    if (!req.params.id) {
+    if (!req.body.id) {
         throw new MissingFieldError('id');
       }
-  
-      res.send(await this.taskService.deleteTask(getValidObjectId(req.params.id)));
+      await this.taskService.deleteTask(getValidObjectId(req.body.id))
+      res.status(200).send(response(null,null,"Task deleted successfully"));
   }
 
 }

@@ -28,7 +28,6 @@ export function validatePayload(schemaObj:any, payloadObj:any) {
         if (valid) return {statusCode:200,isValid:true}
         if (!valid) throw validate.errors
     } catch (error:any) {
-        console.log("eroor",error)
         const errorObj = {
             statusCode: 404,
             isValid:false,
@@ -45,13 +44,9 @@ export function validatePayload(schemaObj:any, payloadObj:any) {
 
 
 function fromAJVErrorsToIErrors(errors: any): IError[] {
-    console.log(errors)
     return errors.map((error: any) => {
-        console.log("error.dataPath",error.dataPath)
-        console.log("error.params",error.params)
       let field: string = error.dataPath || error.params && error.params.missingProperty || error.params && error.params.additionalProperty ||error.instancePath || "";
       let addParams = error.params && error.params.additionalProperty ? "- " + error.params.additionalProperty: "";
-     console.log("field",field)
       if (field.startsWith("/")) {
         field = field.substring(1);
       }
