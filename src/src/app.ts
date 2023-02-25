@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 import 'reflect-metadata';
 import * as express from 'express';
+
+
 import * as compress from 'compression';
 import app from './server';
 import * as cors from 'cors';
