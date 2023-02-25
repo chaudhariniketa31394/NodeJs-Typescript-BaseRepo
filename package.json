@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./build/src/src/app.js",
+    "build": "tsc --watch",
     "test": "jest --coverage --forceExit /src/test",
     "build":"tsc",
     "lint": "eslint . --ext .ts",
