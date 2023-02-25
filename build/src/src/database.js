@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
 const mongodb_1 = require("mongodb");
-const logger_1 = require("./logger");
 const path = require("path");
+const logger_1 = require("./logger");
 /**
  * All the methods and properties mentioned in the following class is
  * specific to MongoDB. You should make necessary changes to support
