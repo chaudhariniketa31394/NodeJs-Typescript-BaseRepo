@@ -1,12 +1,7 @@
 import { Application, Request as ExpressRequest, Response as ExpressResponse, NextFunction } from 'express';
 import { NotFoundError, ApplicationError } from './app.errors';
 import { MongoError } from 'mongodb';
-<<<<<<< HEAD
-
-=======
 import log from '../logger';
->>>>>>> parent of 5512504 (changes)
-
 export default function (app: Application) {
 
   /**

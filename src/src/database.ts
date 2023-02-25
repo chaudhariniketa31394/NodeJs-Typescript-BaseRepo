@@ -1,10 +1,6 @@
 import { MongoClient, Db, Collection } from 'mongodb';
-<<<<<<< HEAD
-=======
-import logger from './logger';
->>>>>>> parent of 5512504 (changes)
 import * as path from 'path';
-
+import logger from './logger';
 
 /**
  * All the methods and properties mentioned in the following class is

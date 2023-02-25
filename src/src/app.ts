@@ -9,10 +9,7 @@ import app from './server';
 import * as cors from 'cors';
 import routes from './routes';
 import errorHandler from './errors/error.handler';
-<<<<<<< HEAD
-=======
 import logger from './logger';
->>>>>>> parent of 5512504 (changes)
 import initDB from './database';
 
 /**

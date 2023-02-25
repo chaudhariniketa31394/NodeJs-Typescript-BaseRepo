@@ -7,12 +7,7 @@ import StaticStringKeys from '../constants';
 import { UserDocument, IUserRepository  } from '../repositories/user.repository';
 import { TYPES } from '../types';
 import { sendMail } from '../utils/mail';
-<<<<<<< HEAD
-
-=======
 import logger from '../logger';
->>>>>>> parent of 5512504 (changes)
-
 const jwt = require('jsonwebtoken');
 
 
