@@ -1,7 +1,7 @@
 import { Application, Request as ExpressRequest, Response as ExpressResponse, NextFunction } from 'express';
 import { NotFoundError, ApplicationError } from './app.errors';
 import { MongoError } from 'mongodb';
-import log from '../logger';
+
 
 export default function (app: Application) {
 
@@ -18,7 +18,7 @@ export default function (app: Application) {
   app.use((err: ApplicationError, _req: ExpressRequest, res: ExpressResponse, next: NextFunction) => {
     if (err instanceof ApplicationError) {
       if (err.message) {
-        log.info(err.message);
+    //    log.info(err.message);
         return res.status(err.code).send(err.message);
       } else {
         return res.sendStatus(err.code);
@@ -34,9 +34,9 @@ export default function (app: Application) {
 
     if (err instanceof MongoError) {
       if (err.code === 11000) {
-        log.error(`${req.method} ${req.path}: MongoDB duplicate entry from ${userString}`);
+        // log.error(`${req.method} ${req.path}: MongoDB duplicate entry from ${userString}`);
       } else {
-        log.error(`${req.method} ${req.path}: Unhandled MongoDB error ${userString}. ${err.errmsg}`);
+        // log.error(`${req.method} ${req.path}: Unhandled MongoDB error ${userString}. ${err.errmsg}`);
       }
 
       if (!res.headersSent) {
@@ -44,9 +44,9 @@ export default function (app: Application) {
       }
 
     } else if (err instanceof Error) {
-      log.error(`${req.method} ${req.path}: Unhandled request error ${userString}. ${err.message}`);
+      // log.error(`${req.method} ${req.path}: Unhandled request error ${userString}. ${err.message}`);
     } else if (typeof err === 'string') {
-      log.error(`${req.method} ${req.path}: Unhandled request error ${userString}. ${err}`);
+      // log.error(`${req.method} ${req.path}: Unhandled request error ${userString}. ${err}`);
     }
 
     next(err);

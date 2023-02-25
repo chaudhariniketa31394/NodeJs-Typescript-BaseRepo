@@ -7,7 +7,7 @@ import StaticStringKeys from '../constants';
 import { UserDocument, IUserRepository  } from '../repositories/user.repository';
 import { TYPES } from '../types';
 import { sendMail } from '../utils/mail';
-import logger from '../logger';
+
 
 const jwt = require('jsonwebtoken');
 
@@ -76,7 +76,11 @@ export default class UserService implements IUserService {
       password,
     };
    
-      return await this.userRepository.create(userData).catch((error:any) => logger.info(error.message))
+      return await this.userRepository.create(userData).catch((error:any) => {
+        console.log(error)
+ //     logger.info(error.message)
+    }
+      )
         
   }
 
@@ -204,7 +208,10 @@ export default class UserService implements IUserService {
     user= user[0];
       const otp = (Math.floor(100000 + Math.random() * 900000));
       await this.userRepository.update({_id: user._id }, { otp: otp }); 
-      return await sendMail({OTP:otp, to: user.email, subject:StaticStringKeys.OTP_EMAIL_SUBJECT}).catch((error:any) => logger.info(error.message))
+      return await sendMail({OTP:otp, to: user.email, subject:StaticStringKeys.OTP_EMAIL_SUBJECT}).catch((error:any) => {
+       console.log("error",error )
+        // logger.info(error.message)
+      })
   }
   public async validateOtp(data: ValidateOtpDto): Promise<any> {
     const normalizedEmail = this.normalizeEmail(data.email);
