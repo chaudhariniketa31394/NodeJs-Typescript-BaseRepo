@@ -41,7 +41,8 @@ async function bootstrap() {
   /**
    * Configure cors
    */
-  app.use(cors());
+  app.use(cors({origin: "https://teal-friendly-abalone.cyclic.app" }));
+  
 
   /**
    * Configure mongoose
