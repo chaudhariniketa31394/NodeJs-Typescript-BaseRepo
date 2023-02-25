@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node ./build/src/src/app.js",
     "test": "jest --coverage --forceExit /src/test",
+    "build":"tsc",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "dev-config": "nodemon src/src/app.ts",
