@@ -8,22 +8,38 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
+const database_1 = require("../database");
 const repository_1 = require("./repository");
 /**
  * User repository. In the constructor we pass the collection name to the
  * parent constructor.
  *
  */
-let UserRepository = class UserRepository extends repository_1.default {
+let TaskRepository = class TaskRepository extends repository_1.default {
     constructor() {
         super('tasks'); // Passing collection name
+        this.container = database_1.default.getCollection('tasks');
+    }
+    allTask(query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.container.find(query.query, query.options).toArray();
+        });
     }
 };
-UserRepository = __decorate([
+TaskRepository = __decorate([
     (0, inversify_1.injectable)(),
     __metadata("design:paramtypes", [])
-], UserRepository);
-exports.default = UserRepository;
+], TaskRepository);
+exports.default = TaskRepository;
 //# sourceMappingURL=task.repository.js.map

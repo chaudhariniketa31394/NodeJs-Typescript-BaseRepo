@@ -39,7 +39,7 @@ let Repository = class Repository {
         return __awaiter(this, void 0, void 0, function* () {
             const objectId = (0, utils_1.getValidObjectId)(id);
             const collection = this.collection;
-            const doc = yield collection.findOne({ _id: objectId }, select);
+            const doc = yield collection.findOne({ _id: objectId }, { projection: select });
             return doc;
         });
     }

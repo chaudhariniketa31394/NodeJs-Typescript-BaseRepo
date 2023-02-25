@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMailConfig = exports.getOTPConfig = exports.getUnAuthorizedRoutes = exports.getValidObjectId = exports.mkdir = exports.exists = void 0;
+exports.response = exports.getMailConfig = exports.getOTPConfig = exports.getValidateRoutes = exports.getUnAuthorizedRoutes = exports.getValidObjectId = exports.mkdir = exports.exists = void 0;
 const mongodb_1 = require("mongodb");
 const fs = require("fs");
 const utils = require("util");
@@ -20,11 +20,18 @@ function getValidObjectId(id) {
 exports.getValidObjectId = getValidObjectId;
 function getUnAuthorizedRoutes() {
     return [
-        '/users',
-        '/login'
+        '/user',
+        '/login',
     ];
 }
 exports.getUnAuthorizedRoutes = getUnAuthorizedRoutes;
+function getValidateRoutes() {
+    return [
+        '/sendotp',
+        '/validateotp',
+    ];
+}
+exports.getValidateRoutes = getValidateRoutes;
 function getOTPConfig() {
     return {
         OTP_LENGTH: 4,
@@ -49,4 +56,13 @@ function getMailConfig() {
     };
 }
 exports.getMailConfig = getMailConfig;
+function response(error, data, message) {
+    const payload = {
+        errors: error,
+        data: data,
+        message: message
+    };
+    return payload;
+}
+exports.response = response;
 //# sourceMappingURL=utils.js.map

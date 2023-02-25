@@ -22,22 +22,28 @@ const inversify_1 = require("inversify");
 const app_errors_1 = require("../errors/app.errors");
 const utils_1 = require("../utils/utils");
 const types_1 = require("../types");
+const validators_1 = require("../utils/validators");
+const task_model_1 = require("../dto/model/task.model");
 let TaskController = class TaskController {
     constructor() {
         this.limit = 20;
     }
     find(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const limit = req.query.limit ? parseInt(req.query.limit) : this.limit;
-            const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
-            const getTaskDto = {
-                pageNumber,
-                limit,
-                filter: req.query.filter,
-                path: req.path,
+            const { limit, pageNumber, filterquery } = req.body;
+            const query = {
+                query: filterquery,
+                options: {
+                    limit: parseInt(limit) || this.limit,
+                    //sort: {DocumentCreatedOn: -1},
+                    projection: { title: 1, description: 1, status: 1 },
+                    skip: (parseInt(pageNumber) > 0) ? limit * (parseInt(pageNumber) - 1) : 0
+                },
+                pageNumber: pageNumber,
+                path: req.path
             };
-            const response = yield this.taskService.getAllTasks(getTaskDto);
-            res.send(response);
+            const result = yield this.taskService.getAllTasks(query);
+            res.status(200).send((0, utils_1.response)(null, result, 'data fetch successfully'));
         });
     }
     get(req, res) {
@@ -57,38 +63,35 @@ let TaskController = class TaskController {
      **/
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!req.body.title) {
-                throw new app_errors_1.MissingFieldError('title');
+            const validate = yield (0, validators_1.validatePayload)(task_model_1.TaskCreateSchema, req.body);
+            if (validate && validate.isValid && validate.statusCode == 200) {
+                const result = yield this.taskService.createTask(req.body);
+                res.status(201).send((0, utils_1.response)(null, result, 'task created'));
             }
-            if (!req.body.description) {
-                throw new app_errors_1.MissingFieldError('description');
-            }
-            const createTaskDto = {
-                title: req.body.title,
-                description: req.body.description
-            };
-            yield this.taskService.createTask(createTaskDto);
-            res.sendStatus(201);
+            else
+                res.status(validate.statusCode).send((0, utils_1.response)(validate.error, null, null));
         });
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!req.params.id) {
-                throw new app_errors_1.MissingFieldError('id');
+            const validate = yield (0, validators_1.validatePayload)(task_model_1.TaskUpdateSchema, req.body);
+            if (validate && validate.isValid && validate.statusCode == 200) {
+                req.body.taskid = (0, utils_1.getValidObjectId)(req.body.taskid);
+                yield this.taskService.updateTask(req.body);
+                res.status(200).send((0, utils_1.response)(null, null, 'task updated'));
             }
-            const updateTaskDto = {
-                title: req.body.title,
-                description: req.body.description
-            };
-            res.send(yield this.taskService.updateTask((0, utils_1.getValidObjectId)(req.params.id), updateTaskDto));
+            else
+                res.status(validate.statusCode).send((0, utils_1.response)(validate.error, null, null));
+            // res.send(await this.taskService.updateTask(getValidObjectId(req.params.id), updateTaskDto));
         });
     }
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!req.params.id) {
+            if (!req.body.id) {
                 throw new app_errors_1.MissingFieldError('id');
             }
-            res.send(yield this.taskService.deleteTask((0, utils_1.getValidObjectId)(req.params.id)));
+            yield this.taskService.deleteTask((0, utils_1.getValidObjectId)(req.body.id));
+            res.status(200).send((0, utils_1.response)(null, null, "Task deleted successfully"));
         });
     }
 };

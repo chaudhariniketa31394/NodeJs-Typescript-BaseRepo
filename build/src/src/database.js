@@ -47,8 +47,6 @@ class Database {
             this.dbClient = yield client.connect();
             logger_1.default.info('Connected with database host');
             this.databaseInstance = this.dbClient.db(this.dbName);
-            const users = yield this.databaseInstance.collection('users').find().toArray();
-            logger_1.default.info(`Users collection found: ${JSON.stringify(users)}`);
         });
     }
     disconnect() {

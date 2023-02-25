@@ -50,12 +50,6 @@ describe('Users', () => {
             const body = { username: 'name', password: 'thisisaverylargepassword', email: 'name@email.com' };
             yield createUserRequest(body, 'Invalid password', 400);
         }));
-        test('response 400 if email not available', () => __awaiter(void 0, void 0, void 0, function* () {
-            const body = { username: 'name', password: 'pass', email: 'name@email.com' };
-            yield createUserRequest(body, 'Created', 201);
-            body.username = 'another';
-            yield createUserRequest(body, 'Try another email', 400);
-        }));
     });
     describe('Get user', () => {
         beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {

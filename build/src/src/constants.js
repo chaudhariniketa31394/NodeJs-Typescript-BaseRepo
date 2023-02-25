@@ -12,6 +12,7 @@ var StaticStringKeys;
     StaticStringKeys["USER_NOT_FOUND"] = "User not found";
     StaticStringKeys["USERNAME_NOT_AVAILABLE"] = "Try another username";
     StaticStringKeys["EMAIL_NOT_AVAILABLE"] = "Try another email";
+    StaticStringKeys["TOKEN_NOT_VALID"] = "Token invalid";
     StaticStringKeys["UNKNOWN_ERROR_TRY_AGAIN"] = "Unknown error occured. Please try again.";
     StaticStringKeys["OTP_EMAIL_SUBJECT"] = "OTP \u2714";
     StaticStringKeys["REPOSITORY_ERROR_INVALID_ID"] = "Invalid id";

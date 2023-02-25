@@ -17,6 +17,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
 const pagination_1 = require("../utils/pagination");
@@ -28,33 +39,26 @@ const types_1 = require("../types");
 let TaskService = class TaskService {
     createTask(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const normalizedTitle = this.normalizeContent(data.title);
-            const normalizedDesc = this.normalizeContent(data.description);
-            const taskData = {
-                title: normalizedTitle,
-                description: normalizedDesc,
-            };
-            yield this.taskRepository.create(taskData);
+            return yield this.taskRepository.create(data);
         });
     }
-    getAllTasks(getUserDto) {
+    getAllTasks(query) {
         return __awaiter(this, void 0, void 0, function* () {
             let documents;
-            const filter = getUserDto.filter || {};
-            documents = yield this.taskRepository.find(filter, getUserDto.limit, getUserDto.pageNumber);
-            return (0, pagination_1.default)(documents, getUserDto.limit, getUserDto.pageNumber, getUserDto.path);
-        });
-    }
-    updateTask(id, data) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.taskRepository.update({ _id: id }, data);
+            documents = yield this.taskRepository.allTask(query);
+            const data = (0, pagination_1.default)(documents, query.options.limit, query.pageNumber, query.path);
             return data;
         });
     }
-    deleteTask(id) {
+    updateTask(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.taskRepository.removeById(id);
-            return { msg: 'Task deleted' };
+            const { taskid } = data, payload = __rest(data, ["taskid"]);
+            yield this.taskRepository.update({ _id: data.taskid }, payload);
+        });
+    }
+    deleteTask(taskid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.taskRepository.update({ _id: taskid }, { _isDeleted: true, isActive: true });
         });
     }
     normalizeContent(data) {

@@ -55,7 +55,7 @@ let UserController = class UserController {
             if (!req.params.id) {
                 throw new app_errors_1.MissingFieldError('id');
             }
-            const user = yield this.userRepository.get((0, utils_1.getValidObjectId)(req.params.id));
+            const user = yield this.userRepository.get((0, utils_1.getValidObjectId)(req.params.id), { "username": 1, "email": 1, "isActive": 1 });
             res.send(user);
         });
     }
@@ -88,8 +88,9 @@ let UserController = class UserController {
                 username: req.body.username,
                 password: req.body.password,
             };
-            yield this.userService.createUser(createUserDto);
-            res.sendStatus(201);
+            const result = yield this.userService.createUser(createUserDto);
+            delete result["password"];
+            res.status(201).send((0, utils_1.response)(null, result, 'user created successfully'));
         });
     }
     /**
@@ -168,13 +169,22 @@ let UserController = class UserController {
             res.send(yield this.userService.logout(token));
         });
     }
-    validateOtp(req, res) {
+    sendOtp(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!req.body.email) {
                 throw new app_errors_1.MissingFieldError('email');
             }
-            if (!req.body.otp) {
-                throw new app_errors_1.MissingFieldError('otp');
+            const otpDto = {
+                email: req.body.email,
+            };
+            yield this.userService.sendOtp(otpDto);
+            res.status(200).send((0, utils_1.response)(null, null, 'otp send successfully'));
+        });
+    }
+    validateOtp(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!req.body.email) {
+                throw new app_errors_1.MissingFieldError('email');
             }
             const otpDto = {
                 email: req.body.email,

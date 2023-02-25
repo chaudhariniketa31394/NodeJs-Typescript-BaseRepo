@@ -24,7 +24,6 @@ const pagination_1 = require("../utils/pagination");
 const app_errors_1 = require("../errors/app.errors");
 const constants_1 = require("../constants");
 const types_1 = require("../types");
-const otpUtil_1 = require("../utils/otpUtil");
 const mail_1 = require("../utils/mail");
 const logger_1 = require("../logger");
 const jwt = require('jsonwebtoken');
@@ -52,14 +51,10 @@ let UserService = class UserService {
             const userData = {
                 username: normalizedUsername,
                 email: normalizedEmail,
-                otp: (0, otpUtil_1.generateOTP)(),
                 isActive: false,
                 password,
             };
-            yield Promise.all([
-                this.userRepository.create(userData).catch((error) => logger_1.default.info(error.message)),
-                (0, mail_1.sendMail)({ OTP: userData.otp, to: userData.email, subject: constants_1.default.OTP_EMAIL_SUBJECT }).catch((error) => logger_1.default.info(error.message))
-            ]);
+            return yield this.userRepository.create(userData).catch((error) => logger_1.default.info(error.message));
         });
     }
     getAllUsers(getUserDto) {
@@ -148,6 +143,7 @@ let UserService = class UserService {
             const normalizedEmail = this.normalizeEmail(data.email);
             const password = data.password;
             let user = yield this.userRepository.find({ email: normalizedEmail }, 1, 1);
+            console.log("useruser", user);
             if (!(Array.isArray(user) && user.length > 0)) {
                 throw new app_errors_1.BadRequestError(constants_1.default.EMAIL_NOT_AVAILABLE);
             }
@@ -156,12 +152,25 @@ let UserService = class UserService {
             if (user && (yield bcrypt.compare(password, hashedPassword))) {
                 // Create token
                 const token = jwt.sign({ _id: user._id, email: normalizedEmail, password: password }, process.env.TOKEN_KEY, {
-                    expiresIn: "2h",
+                    expiresIn: "1h",
                 });
                 yield this.userRepository.update({ _id: user._id }, { token: token });
                 return { email: normalizedEmail, token: token };
             }
             return { email: normalizedEmail, token: '' };
+        });
+    }
+    sendOtp(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const normalizedEmail = this.normalizeEmail(data.email);
+            let user = yield this.userRepository.find({ email: normalizedEmail }, 1, 1);
+            if (!(Array.isArray(user) && user.length > 0)) {
+                throw new app_errors_1.BadRequestError(constants_1.default.EMAIL_NOT_AVAILABLE);
+            }
+            user = user[0];
+            const otp = (Math.floor(100000 + Math.random() * 900000));
+            yield this.userRepository.update({ _id: user._id }, { otp: otp });
+            return yield (0, mail_1.sendMail)({ OTP: otp, to: user.email, subject: constants_1.default.OTP_EMAIL_SUBJECT }).catch((error) => logger_1.default.info(error.message));
         });
     }
     validateOtp(data) {
@@ -188,7 +197,7 @@ let UserService = class UserService {
                 throw new app_errors_1.BadRequestError(constants_1.default.EMAIL_NOT_AVAILABLE);
             }
             user = user[0];
-            yield this.userRepository.unsetUpdate({ _id: user._id }, { $unset: { token: 1 } });
+            yield this.userRepository.update({ _id: user._id }, { token: null, isActive: false });
             return { msg: "logged out successfully" };
         });
     }

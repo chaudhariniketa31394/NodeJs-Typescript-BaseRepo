@@ -45,7 +45,6 @@ function sendMail(params) {
             return info;
         }
         catch (error) {
-            console.log(error);
             return false;
         }
     });

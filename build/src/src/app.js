@@ -11,6 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const source_map_support_1 = require("source-map-support");
 (0, source_map_support_1.install)();
+const dotenv = require("dotenv");
+dotenv.config();
 require("reflect-metadata");
 const express = require("express");
 const compress = require("compression");
@@ -54,10 +56,6 @@ function bootstrap() {
          */
         server_1.default.use(express.json());
         server_1.default.use(express.urlencoded({ extended: true }));
-        /**
-         * Host static public directory
-         */
-        server_1.default.use('/', express.static('public'));
         /**
          * Configure routes
          */
