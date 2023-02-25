@@ -6,7 +6,7 @@ import { BadRequestError, MissingFieldError } from '../errors/app.errors';
 import StaticStringKeys from '../constants';
 import { UserGetDTO as UserGetDto, UserCreateDTO, UserUpdatePasswordDTO, UserUpdateEmailDTO, LoginDto, ValidateOtpDto } from '../dto/user.dto';
 import { IUserService } from '../services/user.service';
-import { getValidObjectId } from '../utils/utils';
+import { getValidObjectId, response } from '../utils/utils';
 import { IUserRepository, UserDocument } from '../repositories/user.repository';
 import { TYPES } from '../types';
 import { FilterQuery } from 'mongodb';
@@ -49,7 +49,7 @@ export default class UserController {
       throw new MissingFieldError('id');
     }
 
-    const user = await this.userRepository.get(getValidObjectId(req.params.id));
+    const user = await this.userRepository.get(getValidObjectId(req.params.id), { "username": 1, "email": 1, "isActive": 1 });
     res.send(user);
   }
 
@@ -88,9 +88,9 @@ export default class UserController {
       password: req.body.password,
     };
 
-    await this.userService.createUser(createUserDto);
-
-    res.sendStatus(201);
+    const result = await this.userService.createUser(createUserDto);
+    delete result["password"];
+    res.status(201).send(response(null, result, 'user created successfully'));
   }
 
   /**
@@ -168,22 +168,29 @@ export default class UserController {
 
   public async logout(req: ExpressRequest, res: ExpressResponse): Promise<void> {
     const token =
-          req.body.token || req.query.token || req.headers["x-access-token"];
+      req.body.token || req.query.token || req.headers["x-access-token"];
     if (!token) {
       throw new MissingFieldError('token');
     }
     res.send(await this.userService.logout(token));
   }
 
-  public async validateOtp(req: ExpressRequest, res: ExpressResponse): Promise<void> {
+  public async sendOtp(req: ExpressRequest, res: ExpressResponse): Promise<void> {
     if (!req.body.email) {
       throw new MissingFieldError('email');
     }
+    const otpDto: ValidateOtpDto = {
+      email: req.body.email,
+    };
+    await this.userService.sendOtp(otpDto);
+    res.status(200).send(response(null, null, 'otp send successfully'));
+  }
 
-    if (!req.body.otp) {
-      throw new MissingFieldError('otp');
+  public async validateOtp(req: ExpressRequest, res: ExpressResponse): Promise<void> {
+
+    if (!req.body.email) {
+      throw new MissingFieldError('email');
     }
-
     const otpDto: ValidateOtpDto = {
       email: req.body.email,
       otp: req.body.otp,
@@ -191,4 +198,7 @@ export default class UserController {
     const user = await this.userService.validateOtp(otpDto);
     res.send(user);
   }
+
 }
+
+

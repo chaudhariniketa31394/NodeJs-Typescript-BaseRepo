@@ -13,7 +13,7 @@ export interface UserDocument {
   lastLoggedIn?: Date;
   password: string;
   role?: number;
-  otp?: string;
+  otp?: number
   isActive?: boolean;
   deletedAt?: Date;
   createdAt?: Date;
@@ -26,6 +26,7 @@ export interface UserDocument {
 export interface IUserRepository extends IRepository<UserDocument> {
   isUsernameExists(username: string): Promise<boolean>;
   isEmailExists(username: string): Promise<boolean>;
+  
 }
 
 /**

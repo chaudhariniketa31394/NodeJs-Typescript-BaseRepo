@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
-  description: "This is a sample server Petstore server.  You can find out more about Swagger at <a href=\"http://swagger.io\">http://swagger.io</a> or on irc.freenode.net, #swagger.  For this sample, you can use the api key \"special-key\" to test the authorization filters"
+  description: "This is a sample server TODO server.  You can find out more about Swagger at <a href=\"http://swagger.io\">http://swagger.io</a> or on irc.freenode.net, #swagger.  For this sample, you can use the api key \"special-key\" to test the authorization filters"
   version: 1.0.0
-  title: Swagger Petstore YAML
+  title: Swagger TODO YAML
   termsOfService: "http://swagger.io/terms/"
   contact:
     email: "apiteam@swagger.io"
@@ -13,12 +13,12 @@ host: "localhost:3000"
 basePath:
 tags:
   - name: User
-    description: Everything about your Pets
+    description: Everything about your users
     externalDocs:
       description: Find out more
       url: "http://swagger.io"
   - name: Task
-    description: Operations about user
+    description: Operations about Task
 schemes:
   - http
 paths:
@@ -71,20 +71,52 @@ paths:
             properties:
               email:
                 type: string
+                example: chaudhariniketa31394@gmail.com
               password:
                 type: string
+                example: niketa31@
       responses:
         "200":
           description: login successfully
         "400":
           description: Invalid status value               
-  /validate:
+  /sendotp:
     post:
       tags:
         - User
-      summary: validate user
-      description: "validate user"
-      operationId: findPetsByTags
+      summary: send otp on email
+      description: send otp on email
+      operationId: send otp on email
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: header
+          name: x-access-token
+          type: bearer      
+        - in: body
+          name: RequestBody
+          description: validate user.
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                type: string
+                example: chaudhariniketa31394@gmail.com
+      responses:
+        "200":
+          description: OTP sent successfully
+        "400":
+          description: Invalid status value     
+  /validateotp:
+    post:
+      tags:
+        - User
+      summary: validate user by otp
+      description: validate user by otp
+      operationId: validate user by otp
       produces:
         - application/xml
         - application/json
@@ -103,18 +135,20 @@ paths:
             properties:
               email:
                 type: string
+                example: chaudhariniketa31394@gmail.com
               otp:
-                type: string
+                type: number
+                example: 123456
       responses:
         "200":
-          description: OTP validation successful
+          description: OTP validation successfully
         "400":
-          description: Invalid status value                
+          description: Invalid status value              
   "/users/{userId}":
     get:
       tags:
         - User
-      summary: Find pet by ID
+      summary: Find User by ID
       description: Returns a single user
       operationId: getUserById
       consumes:
@@ -133,6 +167,26 @@ paths:
       responses:
         "200":
           description: operation successful
+        "400":
+          description: Invalid status value 
+  /logout:
+    get:
+      tags:
+        - User
+      summary: Logout
+      description: Returns a single user
+      operationId: getUserById
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-access-token
+          type: bearer    
+      responses:
+        "200":
+          description: user logout successful
         "400":
           description: Invalid status value 
   /tasks:            
@@ -260,7 +314,7 @@ paths:
           type: bearer  
         - in: path
           name: taskId
-          description: Pet object that needs to be added to the store
+          description: Task object that needs to be deleted
           required: false
       responses:
         "200":
@@ -286,7 +340,7 @@ definitions:
         example: niketachaudhari
       email:
         type: string
-        example: niketa31@gmail.com
+        example: chaudhariniketa31394@gmail.com
       password:
         type: string
         example : niketa312@@

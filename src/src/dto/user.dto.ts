@@ -13,7 +13,7 @@ export interface UserCreateDTO {
   email: string;
   password: string;
   isActive?: boolean;
-  otp?: string;
+  otp?: number;
 
 }
 
@@ -34,5 +34,5 @@ export interface LoginDto {
 
 export interface ValidateOtpDto {
   email: string;
-  otp: string;
+  otp?: string;
 }

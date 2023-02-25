@@ -7,10 +7,6 @@ export interface Pagination<T> {
 }
 
 export default function paginate<T>(documents: T[], limit: number, pageNumber: number, path: string ): Pagination<T> {
- console.log("documents",documents)
- console.log("limit",limit)
- console.log(" pageNumber",pageNumber)
- console.log("path",path,"jjjjjjjjjjjjhhhhhhhhhhhh",process.env.BASE_URL)
   return {
     data: documents,
     limit,

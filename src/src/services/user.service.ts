@@ -6,7 +6,6 @@ import { BadRequestError } from '../errors/app.errors';
 import StaticStringKeys from '../constants';
 import { UserDocument, IUserRepository  } from '../repositories/user.repository';
 import { TYPES } from '../types';
-import { generateOTP } from '../utils/otpUtil';
 import { sendMail } from '../utils/mail';
 import logger from '../logger';
 
@@ -37,7 +36,8 @@ export interface IUserService {
   hashPassword(password: string): Promise<string>;
   normalizeUser(user: UserDocument): NormalizedUserDocument;
   login(user: LoginDto): Promise<any>;
-  validateOtp(data:ValidateOtpDto): Promise<any>;
+  sendOtp(data:ValidateOtpDto): Promise<any>;
+  validateOtp(data:ValidateOtpDto): Promise<any>;  
   logout(token: string): Promise<any>;
 }
 
@@ -72,14 +72,12 @@ export default class UserService implements IUserService {
     const userData: UserCreateDTO = {
       username: normalizedUsername,
       email: normalizedEmail,
-      otp: generateOTP(),
       isActive: false,
       password,
     };
-    await Promise.all([
-      this.userRepository.create(userData).catch((error:any) => logger.info(error.message)),
-      sendMail({OTP: userData.otp, to: userData.email, subject:StaticStringKeys.OTP_EMAIL_SUBJECT}).catch((error:any) => logger.info(error.message))
-    ])
+   
+      return await this.userRepository.create(userData).catch((error:any) => logger.info(error.message))
+        
   }
 
   public async getAllUsers(getUserDto: UserGetDTO): Promise<Pagination<UserDocument>> {
@@ -140,9 +138,7 @@ export default class UserService implements IUserService {
     if (!this.isValidUsername(username)) {
       return false;
     }
-
     const isExists = await this.userRepository.isUsernameExists(username);
-
     return isExists;
   }
 
@@ -175,14 +171,12 @@ export default class UserService implements IUserService {
     const normalizedEmail = this.normalizeEmail(data.email);
     const password = data.password;
     let user:any = await this.userRepository.find({email: normalizedEmail},1,1);
-
+    console.log("useruser",user)
     if(!(Array.isArray(user) && user.length > 0)) {
       throw new BadRequestError(StaticStringKeys.EMAIL_NOT_AVAILABLE);
     }
     user= user[0];
-
     const hashedPassword = await this.hashPassword(data.password);
-
     if (user && (await bcrypt.compare(password, hashedPassword))) {
           // Create token
           const token = jwt.sign(
@@ -201,10 +195,20 @@ export default class UserService implements IUserService {
     return {email: normalizedEmail, token: ''} ;
   }
 
+  public async sendOtp(data: ValidateOtpDto): Promise<any> {
+    const normalizedEmail = this.normalizeEmail(data.email);
+    let user:any = await this.userRepository.find({email: normalizedEmail},1,1);
+    if(!(Array.isArray(user) && user.length > 0)) {
+      throw new BadRequestError(StaticStringKeys.EMAIL_NOT_AVAILABLE);
+    }
+    user= user[0];
+      const otp = (Math.floor(100000 + Math.random() * 900000));
+      await this.userRepository.update({_id: user._id }, { otp: otp }); 
+      return await sendMail({OTP:otp, to: user.email, subject:StaticStringKeys.OTP_EMAIL_SUBJECT}).catch((error:any) => logger.info(error.message))
+  }
   public async validateOtp(data: ValidateOtpDto): Promise<any> {
     const normalizedEmail = this.normalizeEmail(data.email);
     let user:any = await this.userRepository.find({email: normalizedEmail},1,1);
-
     if(!(Array.isArray(user) && user.length > 0)) {
       throw new BadRequestError(StaticStringKeys.EMAIL_NOT_AVAILABLE);
     }
@@ -216,6 +220,8 @@ export default class UserService implements IUserService {
       return {msg: "OTP has been incorrect"}
     }
   }
+
+
 
   public async logout(token: string): Promise<any> {
     let user:any = await this.userRepository.find({token: token},1,1);

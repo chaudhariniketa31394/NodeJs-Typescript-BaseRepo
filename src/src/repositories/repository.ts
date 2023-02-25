@@ -107,11 +107,8 @@ export default class Repository<T> implements IRepository<T> {
 
   public async get(id: ObjectID, select: Select = {}): Promise<T> {
     const objectId = getValidObjectId(id);
-
     const collection = this.collection;
-
-    const doc: T = await collection.findOne<T>({ _id: objectId }, select);
-
+    const doc: T = await collection.findOne<T>({ _id: objectId }, {projection:select});
     return doc;
   }
 

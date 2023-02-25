@@ -25,10 +25,11 @@ export default function (app: Application) {
 
   app.get('/users', asyncWrap(UserControllerInstance.find.bind(UserControllerInstance)));
   app.get('/users/:id', asyncWrap(UserControllerInstance.get.bind(UserControllerInstance)));
-  app.post('/users', asyncWrap(UserControllerInstance.create.bind(UserControllerInstance)));
+  app.post('/user', asyncWrap(UserControllerInstance.create.bind(UserControllerInstance)));
   app.post('/login', asyncWrap(UserControllerInstance.login.bind(UserControllerInstance)));
-  app.post('/validate', asyncWrap(UserControllerInstance.validateOtp.bind(UserControllerInstance)));
-  app.delete('/logout', asyncWrap(UserControllerInstance.logout.bind(UserControllerInstance)));
+  app.post('/sendotp', asyncWrap(UserControllerInstance.sendOtp.bind(UserControllerInstance)));
+  app.post('/validateotp', asyncWrap(UserControllerInstance.validateOtp.bind(UserControllerInstance)));
+  app.get('/logout', asyncWrap(UserControllerInstance.logout.bind(UserControllerInstance)));
 
 
   app.post('/task', asyncWrap(TaskControllerInstance.create.bind(TaskControllerInstance)));

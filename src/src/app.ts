@@ -1,5 +1,7 @@
 import { install as installSourceMapSupport } from 'source-map-support';
 installSourceMapSupport();
+import * as dotenv from 'dotenv' 
+dotenv.config()
 import 'reflect-metadata';
 import * as express from 'express';
 import * as compress from 'compression';

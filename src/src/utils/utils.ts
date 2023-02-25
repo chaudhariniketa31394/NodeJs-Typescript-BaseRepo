@@ -21,10 +21,8 @@ export function getValidObjectId(id: string | ObjectID) {
 
 export function getUnAuthorizedRoutes(): string[] {
   return [
-    '/users',
+    '/user',
     '/login',
-    '/task',
-    '/tasks'
   ]
 }
 

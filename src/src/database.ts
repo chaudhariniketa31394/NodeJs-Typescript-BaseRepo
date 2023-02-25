@@ -55,10 +55,7 @@ class Database {
     logger.info('Connected with database host');
 
     this.databaseInstance = this.dbClient.db(this.dbName);
-    const users = await this.databaseInstance.collection('users').find().toArray();
-    logger.info(`Users collection found: ${JSON.stringify(users)}`);
-
-  }
+    }
 
   public async disconnect() {
     if (this.dbClient.isConnected()) {

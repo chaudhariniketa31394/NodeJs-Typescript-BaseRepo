@@ -9,7 +9,8 @@
     "test": "jest --coverage --forceExit /src/test",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "dev-config": "nodemon src/src/app.ts"
+    "dev-config": "nodemon src/src/app.ts",
+    "postinstall": "tsc"
   },
   "author": "",
   "license": "ISC",
