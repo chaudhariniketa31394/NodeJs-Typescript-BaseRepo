@@ -9,7 +9,6 @@ import app from './server';
 import * as cors from 'cors';
 import routes from './routes';
 import errorHandler from './errors/error.handler';
-// import logger from './logger';
 import initDB from './database';
 
 /**

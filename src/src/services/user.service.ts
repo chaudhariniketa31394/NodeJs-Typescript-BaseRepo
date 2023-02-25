@@ -7,7 +7,7 @@ import StaticStringKeys from '../constants';
 import { UserDocument, IUserRepository  } from '../repositories/user.repository';
 import { TYPES } from '../types';
 import { sendMail } from '../utils/mail';
-// import logger from '../logger';
+
 
 const jwt = require('jsonwebtoken');
 

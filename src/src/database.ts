@@ -1,5 +1,4 @@
 import { MongoClient, Db, Collection } from 'mongodb';
-// import logger from './logger';
 import * as path from 'path';
 
 
